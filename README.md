@@ -1,8 +1,6 @@
 # aws-assume-role-mfa
 This setup will help you to automatically sign into a root/security account and then role switch to another account
 
-You can also switch between 
-
 # Pre-Requisites 
 
     aws-cli installed and configured
@@ -49,11 +47,11 @@ security add-generic-password -a "myCompany" -s "myCompany" -w "mysecretMFAkey"
 ```
 - Fetch an MFA and fill in :MFA code 1"
 ```
-oathtool --base32 --totp $(security find-generic-password -ga "ovyo" 2>&1 >/dev/null | cut -d'"' -f2) 
+oathtool --base32 --totp $(security find-generic-password -ga "myCompany" 2>&1 >/dev/null | cut -d'"' -f2) 
 ```
 - Wait until the next minute and then Fetch an MFA and fill in :MFA code 2"
 ```
-oathtool --base32 --totp $(security find-generic-password -ga "ovyo" 2>&1 >/dev/null | cut -d'"' -f2) 
+oathtool --base32 --totp $(security find-generic-password -ga "myCompany" 2>&1 >/dev/null | cut -d'"' -f2) 
 ```
 
 # Running the script
