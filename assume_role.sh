@@ -22,8 +22,8 @@ export AWS_PROFILE=$base_profile
 AWS_ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)
 AWS_ACCOUNT_USERNAME=$(aws sts get-caller-identity --output text --query Arn | cut -d/ -f2)
 
-# Get an MFA code (requires 'brew install oath-toolkit')
-AWS_MFA_CODE=$(oathtool --base32 --totp $(security find-generic-password -ga $base_profile 2>&1 >/dev/null | cut -d'"' -f2))
+# Get MFA from the user
+read -p 'MFA: ' AWS_MFA_CODE
 
 # Switch to new Role
 CRED=$(aws sts assume-role --role-arn $role --role-session-name mfacli --serial-number arn:aws:iam::$AWS_ACCOUNT_ID:mfa/$AWS_ACCOUNT_USERNAME --token-code $AWS_MFA_CODE --query '[Credentials.SessionToken,Credentials.AccessKeyId,Credentials.SecretAccessKey]' --output text)
