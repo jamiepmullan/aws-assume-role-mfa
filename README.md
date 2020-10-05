@@ -5,8 +5,7 @@ This setup will help you to automatically sign into a root/security account and 
 
     aws-cli installed and configured
     aws profiles added (as detailed below)
-    oath-toolkit (brew install oath-toolkit)
-    your MFA secret stored (as detailed below)
+    your MFA secret stored (in authenticator app)
 
 # AWS Profiles
 
@@ -32,33 +31,14 @@ role_arn = arn:aws:iam::333333333333:role/myCompany-prod-admin
 source_profile = myCompany
 ```
 
-# MFA secret
-
-To store your MFA secret using oath-toolkit:
-
-Add a Virtual MFA token to your AWS account:
-- (https://console.aws.amazon.com/iam/home#security_credential)
-- Assign MFA device
-- Virtual MFA device
-- Show secret key (copy it) 
-- Add secret key to keychain
-```
-security add-generic-password -a "myCompany" -s "myCompany" -w "mysecretMFAkey"
-```
-- Fetch an MFA and fill in :MFA code 1"
-```
-oathtool --base32 --totp $(security find-generic-password -ga "myCompany" 2>&1 >/dev/null | cut -d'"' -f2) 
-```
-- Wait until the next minute and then Fetch an MFA and fill in :MFA code 2"
-```
-oathtool --base32 --totp $(security find-generic-password -ga "myCompany" 2>&1 >/dev/null | cut -d'"' -f2) 
-```
-
 # Running the script
 
 ```
 source assume_role.sh myCompany-dev
 ```
+
+## MFA Entry
+The app will prompt you for your MFA code (for example from Google Authenticate)
 
 # Alias'
 
